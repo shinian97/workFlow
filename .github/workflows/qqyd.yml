@@ -20,9 +20,9 @@ jobs:
         QQREAD_TIMEHD: ${{ secrets.QQREAD_TIMEHD }}
         
     steps:
-      - name: Checkout
-        run: |
-          git clone https://github.com/ziye12/JavaScript.git ~/JavaScript
+#       - name: Checkout
+#         run: |
+#           git clone https://github.com/ziye12/JavaScript.git ~/JavaScript
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
@@ -30,12 +30,12 @@ jobs:
       - name: npm install
         if: env.QQREAD_HEADER
         run: |
-          cd ~/JavaScript
+          cd ~/
           npm install
       - name: '运行 【读书】'
         if: env.QQREAD_HEADER
         run: |
-          cd ~/JavaScript
+          cd ~/workFlow
           node Task/qqreads.js
         env:
           
