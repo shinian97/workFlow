@@ -204,13 +204,22 @@ qqreadwktime();//周时长查询
 
 else if (i==15)
 qqreadpick();//领周时长奖励
+<<<<<<< HEAD:Task/qqreads.js
      
+=======
+		 
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
 else if (i == 16 && K < qqreadhdArr.length - 1) {
 K += 1;
 all();
  } else if (i == 16 && K == qqreadhdArr.length - 1) {
+<<<<<<< HEAD:Task/qqreads.js
    showmsg();//通知
    console.log(tz)  
+=======
+	 showmsg();//通知
+	 console.log(tz)  
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
             $.done();
           }
         },
@@ -233,6 +242,7 @@ return new Promise((resolve, reject) => {
    $.get(toqqreadtaskurl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 任务列表: ${data}`)
      task =JSON.parse(data)
+<<<<<<< HEAD:Task/qqreads.js
      kz+=
     '【现金余额】:'+
     (task.data.user.amount/10000).toFixed(2)+
@@ -240,18 +250,37 @@ return new Promise((resolve, reject) => {
     '【已开宝箱】:'+
     task.data.treasureBox.count+
   '个\n'
+=======
+	   kz+=
+    '【现金余额】:'+
+    (task.data.user.amount/10000).toFixed(2)+
+	'元\n'+
+    '【已开宝箱】:'+
+    task.data.treasureBox.count+
+	'个\n'
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
     
 tz+=
     '【现金余额】:'+
     (task.data.user.amount/10000).toFixed(2)+
+<<<<<<< HEAD:Task/qqreads.js
   '元\n'+
+=======
+	'元\n'+
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
     '【第'+
   task.data.invite.issue+
   '期】:时间'+
     task.data.invite.dayRange+
+<<<<<<< HEAD:Task/qqreads.js
   '\n'+
     ' 已邀请'+
   task.data.invite.inviteCount+
+=======
+	'\n'+
+    ' 已邀请'+
+	task.data.invite.inviteCount+
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
     '人，再邀请'+
   task.data.invite.nextInviteConfig.count+
     '人获得'+
@@ -640,12 +669,20 @@ tz+='【周时长奖励'+(i+1)+'】:领取'+Packageid[i]+'阅豆\n'
 
 function showmsg() {      
 tz += `\n\n========= 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()} \n\n`;
+<<<<<<< HEAD:Task/qqreads.js
   
+=======
+	
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
 let d = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
 if (d.getHours()==21 && d.getMinutes()<=20 ) {
          notify.sendNotify(jsname,kz)
  }
+<<<<<<< HEAD:Task/qqreads.js
   
+=======
+	
+>>>>>>> 1c3ce7a8bc918eaffa27eab82a1b7ab6151eaba0:qqreads.js
 if (notifyInterval==1)
 $.msg(jsname,'',tz)//显示所有通知
 
