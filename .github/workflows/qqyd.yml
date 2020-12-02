@@ -30,12 +30,12 @@ jobs:
       - name: npm install
         if: env.QQREAD_HEADER
         run: |
-          cd ~/workFlow
+          cd ~/JavaScript
           npm install
       - name: '运行 【企鹅读书】'
         if: env.QQREAD_HEADER
         run: |
-          cd ~/workFlow
+          cd ~/JavaScript
           node Task/qqreads.js
         env:
           
