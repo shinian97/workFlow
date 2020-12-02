@@ -12,7 +12,7 @@
 11.26 增加结束命令
 11.27 调整通知为，成功开启宝箱再通知
 11.28 修复错误
-11.29 更新 支持action.默认每天第1次 第35次推送通知
+11.29 更新 支持action.默认每天21点到21点20通知
 
 ⚠️cookie获取方法：
 
@@ -57,9 +57,10 @@ const jsname='企鹅读书'
 const $ = Env(jsname)
 const notify = $.isNode() ? require('./sendNotify') : '';
 var tz=''
+var kz=''
 
 const logs = 0;   //0为关闭日志，1为开启
-const notifyInterval=2
+const notifyInterval=3
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每15次通知一次
 
 const dd=1//单次任务延迟,默认1秒
@@ -104,7 +105,7 @@ if ($.isNode()) {
         if (qqreadtimeURL[item]) {
           qqreadtimeurlArr.push(qqreadtimeURL[item])
         }
-      })	  
+      })    
     Object.keys(qqreadtimeHD).forEach((item) => {
         if (qqreadtimeHD[item]) {
           qqreadtimehdArr.push(qqreadtimeHD[item])
@@ -203,17 +204,13 @@ qqreadwktime();//周时长查询
 
 else if (i==15)
 qqreadpick();//领周时长奖励
-
-
-
-		 
+     
 else if (i == 16 && K < qqreadhdArr.length - 1) {
 K += 1;
 all();
  } else if (i == 16 && K == qqreadhdArr.length - 1) {
-	 showmsg();//通知
-	 console.log(tz)
-if ($.isNode()&&$.time('HH')>17)notify.sendNotify(jsname,tz)  
+   showmsg();//通知
+   console.log(tz)  
             $.done();
           }
         },
@@ -236,45 +233,53 @@ return new Promise((resolve, reject) => {
    $.get(toqqreadtaskurl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 任务列表: ${data}`)
      task =JSON.parse(data)
+     kz+=
+    '【现金余额】:'+
+    (task.data.user.amount/10000).toFixed(2)+
+  '元\n'+
+    '【已开宝箱】:'+
+    task.data.treasureBox.count+
+  '个\n'
+    
 tz+=
-    '【任务列表】:余额'+
-    task.data.user.amount+
-	'金币\n'+
+    '【现金余额】:'+
+    (task.data.user.amount/10000).toFixed(2)+
+  '元\n'+
     '【第'+
-	task.data.invite.issue+
-	'期】:时间'+
+  task.data.invite.issue+
+  '期】:时间'+
     task.data.invite.dayRange+
-	'\n'+
-    '已邀请'+
-	task.data.invite.inviteCount+
+  '\n'+
+    ' 已邀请'+
+  task.data.invite.inviteCount+
     '人，再邀请'+
-	task.data.invite.nextInviteConfig.count+
+  task.data.invite.nextInviteConfig.count+
     '人获得'+
-	task.data.invite.nextInviteConfig.amount+
-	'金币\n'+
+  task.data.invite.nextInviteConfig.amount+
+  '金币\n'+
     '【'+
-	task.data.taskList[0].title+
-	'】:'+
+  task.data.taskList[0].title+
+  '】:'+
     task.data.taskList[0].amount+
-	'金币,'+
+  '金币,'+
     task.data.taskList[0].actionText+
-	'\n'+
+  '\n'+
     '【'+
-	task.data.taskList[1].title+
-	'】:'+
+  task.data.taskList[1].title+
+  '】:'+
     task.data.taskList[1].amount+
-	'金币,'+
+  '金币,'+
     task.data.taskList[1].actionText+
-	'\n'+
+  '\n'+
     '【'+
-	task.data.taskList[2].title+
-	'】:'+
+  task.data.taskList[2].title+
+  '】:'+
     task.data.taskList[2].amount+
     '金币,'+
     task.data.taskList[2].actionText+
     '\n'+
     '【'+
-	task.data.taskList[3].title+
+  task.data.taskList[3].title+
     '】:'+
     task.data.taskList[3].amount+
     '金币,'+
@@ -286,7 +291,7 @@ tz+=
     task.data.treasureBox.tipText+
     '\n'+
     '【'+task.data.fans.title+
-	'】:'+
+  '】:'+
     task.data.fans.fansCount+
     '个好友,'+
     task.data.fans.todayAmount+
@@ -313,7 +318,8 @@ return new Promise((resolve, reject) => {
    $.get(toqqreadinfourl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 用户名: ${data}`)
      info =JSON.parse(data)
-
+kz+=
+'\n========== 【'+info.data.user.nickName+'】 ==========\n'
 tz+=
 '\n========== 【'+info.data.user.nickName+'】 ==========\n'
 
@@ -361,7 +367,7 @@ return new Promise((resolve, reject) => {
      config =JSON.parse(data)
    if (config.code==0)
 tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
-	   
+     
 resolve()
     })
    })
@@ -373,7 +379,7 @@ return new Promise((resolve, reject) => {
   const toqqreadtimeurl = {
     url: qqreadtimeurlVal.replace(/readTime=/g, `readTime=${TIME}`),
     headers: JSON.parse(qqreadtimeheaderVal),   
-    };	
+    };  
    $.get(toqqreadtimeurl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 阅读时长: ${data}`)
      time =JSON.parse(data)
@@ -397,7 +403,7 @@ if (config.data.pageParams.todayReadSeconds/60>=1){
   $.get(toqqreadssr1url,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 金币奖励1: ${data}`)
      ssr1 =JSON.parse(data)
-	if (ssr1.data.amount>0)   
+  if (ssr1.data.amount>0)   
 tz+='【阅读金币1】获得'+ssr1.data.amount+'金币\n'
 
 resolve()
@@ -417,9 +423,9 @@ if (config.data.pageParams.todayReadSeconds/60>=5){
    $.get(toqqreadssr2url,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 金币奖励2: ${data}`)
      ssr2 =JSON.parse(data)
-	if (ssr2.data.amount>0)   
+  if (ssr2.data.amount>0)   
 tz+='【阅读金币2】获得'+ssr2.data.amount+'金币\n'
-	   
+     
 resolve()
     })
      }
@@ -436,9 +442,9 @@ if (config.data.pageParams.todayReadSeconds/60>=30){
    $.get(toqqreadssr3url,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 金币奖励3: ${data}`)
      ssr3 =JSON.parse(data)
-	if (ssr3.data.amount>0)   
+  if (ssr3.data.amount>0)   
 tz+='【阅读金币3】获得'+ssr3.data.amount+'金币\n'
-	   
+     
 resolve()
       })
      }
@@ -607,10 +613,10 @@ if (wktime.data.readTime>=wktimess){
      pick =JSON.parse(data)
      if (pick.data[7].isPick==true)
 tz+='【周时长奖励】:已全部领取\n'
-	    
+      
 for(let i=0;i<pick.data.length;i++)
  {
-	 setTimeout(()=>{	 
+   setTimeout(()=>{  
 var pickid=pick.data[i].readTime
 var Packageid=['10','10','20','30','50','80','100','120'] 
 const toqqreadPackageurl = {
@@ -623,8 +629,8 @@ const toqqreadPackageurl = {
      if (Package.code==0)
 tz+='【周时长奖励'+(i+1)+'】:领取'+Packageid[i]+'阅豆\n'
      
-                  })			
-	 },i*100)}
+                  })      
+   },i*100)}
            })
     resolve()
         }
@@ -633,8 +639,13 @@ tz+='【周时长奖励'+(i+1)+'】:领取'+Packageid[i]+'阅豆\n'
 
 
 function showmsg() {      
-tz += `\n\n========= 脚本执行时间(TM)：${new Date(new Date().getTime() + 0 * 60 * 60 * 1000).toLocaleString('zh', {hour12: false})} \n\n`;
-	
+tz += `\n\n========= 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()} \n\n`;
+  
+let d = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
+if (d.getHours()==21 && d.getMinutes()<=20 ) {
+         notify.sendNotify(jsname,kz)
+ }
+  
 if (notifyInterval==1)
 $.msg(jsname,'',tz)//显示所有通知
 
